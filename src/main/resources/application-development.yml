@@ -1,0 +1,18 @@
+spring:
+  config:
+    activate:
+      on-profile: development
+  cloud:
+    azure:
+      keyvault:
+        secret:
+          property-source-enabled: true
+          property-sources[0]:
+            endpoint: https://<your-key-vault-resource-name>.vault.azure.net
+            profile:
+              tenant-id: <your-tenant-id>
+            credential:
+              client-id: <your-asp-client-id>
+              client-secret: <your-asp-client-secret>
+  autoconfigure:
+    exclude: com.azure.spring.cloud.autoconfigure.kafka.AzureEventHubsKafkaOAuth2AutoConfiguration

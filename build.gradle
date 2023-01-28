@@ -1,0 +1,60 @@
+plugins {
+    id 'org.springframework.boot' version '2.6.4'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'com.github.hierynomus.license' version '0.16.1'
+    id 'application'
+}
+
+group 'com.chalocodekare.azure-keyvault'
+version "${version}"
+depVersion = "${depVersion}"
+
+sourceCompatibility = '17'
+targetCompatibility = '17'
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+dependencies {
+    implementation 'org.springframework.data:spring-data-commons'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    //to read key vault secrets
+    implementation group: 'com.azure.spring', name: 'spring-cloud-azure-starter-keyvault-secrets', version: '4.3.0'
+}
+
+
+//By default start bootrun on development profile
+bootRun {
+    systemProperties = System.properties
+    systemProperty 'spring.profiles.active', 'development'
+}
+
+
+//To let you override the logical main-class called loader.main
+bootJar {
+    manifest {
+        attributes 'Main-Class': 'org.springframework.boot.loader.PropertiesLauncher'
+    }
+}
+
+jar.enabled = true
+
+//To update license header in all java classes.
+license {
+    ext.year = Calendar.getInstance().get(Calendar.YEAR)
+    includes(["**/*.java"])
+}
+classes.dependsOn(licenseFormat)
